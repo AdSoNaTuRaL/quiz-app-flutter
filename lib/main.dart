@@ -1,65 +1,55 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(QuizApp());
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Contador'),
-    );
-  }
-}
+class QuizAppState extends State<QuizApp> {
+  int perguntaSelecionada = 0;
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
+  void pergunta() {
+    setState(() => {
+      perguntaSelecionada++
     });
+    print(perguntaSelecionada);
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+    final List<String> perguntas = [
+      "What's your favorite color?",
+      "What's your favorite animal?",
+    ];
+
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Perguntas'),
+          centerTitle: true,
+        ),
+        body: Column(
+          children: [
+            Text(perguntas[perguntaSelecionada]),
+            RaisedButton(
+              child: Text('Resposta 1'),
+              onPressed: pergunta,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            RaisedButton(
+              child: Text('Resposta 2'),
+              onPressed: pergunta,
+            ),
+            RaisedButton(
+              child: Text('Resposta 3'),
+              onPressed: pergunta,
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+class QuizApp extends StatefulWidget {
+  @override
+  QuizAppState createState() {
+    return QuizAppState();
+  }
+
 }
