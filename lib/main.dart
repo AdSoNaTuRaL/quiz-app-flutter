@@ -1,41 +1,64 @@
 import 'package:flutter/material.dart';
-import './question.dart';
-import './answer.dart';
+import './result.dart';
+import './questionario.dart';
 
 void main() => runApp(QuizApp());
 
 class _QuizAppState extends State<QuizApp> {
   int _perguntaSelecionada = 0;
+  int _pontuacaoTotal = 0;
   final List<Map<String, Object>> _perguntas = const [
     {
       "question": "What's your favorite color?",
-      "answer": ['Black', 'Red', 'Green', 'Blue'],
+      "answer": [
+        {'text': 'Black', 'ponto': 10},
+        {'text': 'Red', 'ponto': 7},
+        {'text': 'Green', 'ponto': 3},
+        {'text': 'Blue', 'ponto': 6},
+      ],
     },
     {
       "question": "What's your favorite animal?",
-      "answer": ['Bird', 'Dog', 'Cat', 'Snake'],
+      "answer": [
+        {'text': 'Bird', 'ponto': 2},
+        {'text': 'Dog', 'ponto': 10},
+        {'text': 'Cat', 'ponto': 8},
+        {'text': 'Snake', 'ponto': 0},
+      ],
     },
     {
       "question": "What's your favorite country?",
-      "answer": ['Germany', 'Brazil', 'Spain', 'EUA'],
+      "answer": [
+        { 'text': 'Germany', 'ponto': 9 },
+        { 'text': 'Brazil', 'ponto': 10 },
+        { 'text': 'Spain', 'ponto': 7 },
+        { 'text': 'EUA', 'ponto': 0 },
+      ],
     }
   ];
-
-  void _pergunta() {
-    if (hasSelectedQuestion) {
-      setState(() => {_perguntaSelecionada++});
-    }
-  }
 
   bool get hasSelectedQuestion {
     return _perguntaSelecionada < _perguntas.length;
   }
 
+  void _pergunta(int pontuacao) {
+    if (hasSelectedQuestion) {
+      setState(() {
+        _perguntaSelecionada++;
+        _pontuacaoTotal += pontuacao;
+      });
+    }
+  }
+
+  void _reiniciarQuestionario() {
+    setState(() {
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<String> answers =
-        hasSelectedQuestion ? _perguntas[_perguntaSelecionada]['answer'] : null;
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -43,22 +66,12 @@ class _QuizAppState extends State<QuizApp> {
           centerTitle: true,
         ),
         body: hasSelectedQuestion
-            ? Column(
-                children: [
-                  Question(_perguntas[_perguntaSelecionada]['question']),
-                  ...answers
-                      .map((answer) => Answer(answer, _pergunta))
-                      .toList(),
-                ],
+            ? Questionario(
+                perguntas: _perguntas,
+                perguntaSelecionada: _perguntaSelecionada,
+                responder: _pergunta,
               )
-            : Center(
-                child: Text(
-                  'Congrats!',
-                  style: TextStyle(
-                    fontSize: 24,
-                  ),
-                ),
-              ),
+            : Result(_pontuacaoTotal, _reiniciarQuestionario),
       ),
     );
   }
