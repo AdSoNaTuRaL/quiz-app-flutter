@@ -2,7 +2,7 @@
 
 A new Flutter project.
 
-# Project Images
+## Project Images
 
 <div align="center">
    <img src="https://user-images.githubusercontent.com/26275918/99276967-8716f480-282d-11eb-8cc4-d818bfcbfa22.png" width="230">
